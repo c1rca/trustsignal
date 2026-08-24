@@ -55,7 +55,7 @@ backend/uploads/
 test_files/
 /reports/
 # Source SOC reports and generated document exports must stay local.
-*.pdf
+*.[Pp][Dd][Ff]
 *.doc
 *.docx
 *.xls

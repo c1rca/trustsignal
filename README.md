@@ -99,11 +99,8 @@ For everyday local use, Docker Compose is the intended entrypoint.
 If you need to run tests directly:
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 . .venv/bin/activate
-pip install -e backend[dev]
-pytest -q backend/app/tests/unit
-```
-ll -e backend[dev]
+pip install -e 'backend[dev]'
 pytest -q backend/app/tests/unit
 ```
