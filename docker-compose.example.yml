@@ -1,0 +1,35 @@
+services:
+  backend:
+    restart: unless-stopped
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - USE_HTTPS=${USE_HTTPS:-false}
+      - COOKIE_DOMAIN=${COOKIE_DOMAIN:-}
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:5191}
+      - SESSION_TTL_MINUTES=${SESSION_TTL_MINUTES:-480}
+      - AUTH_STORE_PATH=${AUTH_STORE_PATH:-/app/uploads/auth/credentials.json}
+    expose:
+      - "8000"
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+
+  frontend:
+    restart: unless-stopped
+    build:
+      context: ./frontend
+    environment:
+      - VITE_ALLOWED_HOSTS=${FRONTEND_ALLOWED_HOSTS:-localhost,127.0.0.1}
+    ports:
+      - "${FRONTEND_BIND:-127.0.0.1}:${FRONTEND_PORT:-5191}:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+      - ./frontend/postcss.config.js:/app/postcss.config.js
+    depends_on:
+      - backend
